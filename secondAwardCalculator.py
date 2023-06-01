@@ -51,13 +51,27 @@ def getScores(charList, resistantList, charNames):
 
     return scores
 
+def switch(aInt):
+    if aInt == 1:
+        return "cipR"
+    elif aInt == 2:
+        return "tetR"
+    elif aInt == 3:
+        return "cephR"
+    elif aInt == 4:
+        return "strepR"
+    elif aInt == 5:
+        return "amoxR"
+    else:
+        exit()
+
 ##### MAIN #####
 
 #) list name # name in .csv file
 animalSampledList = [] # animals_sampled
 herdSizeList = [] # herd_size
 organicList = [] # organic
-amoxResList = [] # amoxR
+antibioticResList = [] # amoxR
 poultryList = [] # poultry
 wasteMilkList = [] # anything_waste
 weanList = [] # wean
@@ -70,8 +84,8 @@ ampCList = [] # amp_c
 heiferWasteList = [] # heifers_waste
 clinicalMastitisList = [] # whichclinresp #First
 
-antibiotic = input("Antibiotic: ")
-
+antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
+antibiotic = switch(int(antibioticInteger))
 
 with open('dairy_farms_dataset.csv', 'r') as f:
     reader = csv.reader(f)
@@ -81,7 +95,7 @@ with open('dairy_farms_dataset.csv', 'r') as f:
     
     for row in reader:
         herdSize = row[headerRow.index("herd_size")]
-        amoxValue = row[headerRow.index(antibiotic)]
+        antibioticValue = row[headerRow.index(antibiotic)]
         organicValue = row[headerRow.index("organic")]
         poultryValues = row[headerRow.index("poultry")]
         wasteMilkValue = row[headerRow.index("anything_waste")]
@@ -98,7 +112,7 @@ with open('dairy_farms_dataset.csv', 'r') as f:
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
-        amoxResList.append(True if amoxValue == '1' else False)
+        antibioticResList.append(True if antibioticValue == '1' else False)
         poultryList.append(int(poultryValues))
         wasteMilkList.append(int(wasteMilkValue))
         weanList.append(int(weanValue))
@@ -113,7 +127,7 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Third
 
 microDatabase = {
-    "Amoxycillin Resistance": amoxResList,
+    "Amoxycillin Resistance": antibioticResList,
     "Herd Size": herdSizeList,
     "Organic": organicList,
     "Poultry": poultryList,
@@ -137,22 +151,22 @@ weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
 clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"] # Fifth
 
-organicScores = getScores(organicList, amoxResList, binaryNames)
-herdSizeScores = getScores(herdSizeList, amoxResList, herdSizeNames)
-poultryScores = getScores(poultryList, amoxResList, binaryNames)
-wasteMilkScores = getScores(wasteMilkList, amoxResList, binaryNames)
-weanScores = getScores(weanList, amoxResList, weanNames)
-animalSampleScores = getScores(animalSampledList, amoxResList, animalNames)
-ctxMScores = getScores(ctxMList, amoxResList, binaryNames)
-weanedHeiferScores = getScores(weanedHeiferList, amoxResList, binaryNames)
-adultScores = getScores(adultList, amoxResList, binaryNames)
-dryScores = getScores(dryList, amoxResList, binaryNames)
-footPathScores = getScores(footPathList, amoxResList, binaryNames)
-ampCScores = getScores(ampCList, amoxResList, binaryNames)
-heiferWasteScores = getScores(heiferWasteList, amoxResList, binaryNames)
-clinicalMastitisScores = getScores(clinicalMastitisList, amoxResList, clinicalMastitisNames) # Sixth
+organicScores = getScores(organicList, antibioticResList, binaryNames)
+herdSizeScores = getScores(herdSizeList, antibioticResList, herdSizeNames)
+poultryScores = getScores(poultryList, antibioticResList, binaryNames)
+wasteMilkScores = getScores(wasteMilkList, antibioticResList, binaryNames)
+weanScores = getScores(weanList, antibioticResList, weanNames)
+animalSampleScores = getScores(animalSampledList, antibioticResList, animalNames)
+ctxMScores = getScores(ctxMList, antibioticResList, binaryNames)
+weanedHeiferScores = getScores(weanedHeiferList, antibioticResList, binaryNames)
+adultScores = getScores(adultList, antibioticResList, binaryNames)
+dryScores = getScores(dryList, antibioticResList, binaryNames)
+footPathScores = getScores(footPathList, antibioticResList, binaryNames)
+ampCScores = getScores(ampCList, antibioticResList, binaryNames)
+heiferWasteScores = getScores(heiferWasteList, antibioticResList, binaryNames)
+clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames) # Sixth
 
-for i in range(len(amoxResList)):
+for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
     microDatabase["Scores"][i] += herdSizeScores[microDatabase["Herd Size"][i]]
     microDatabase["Scores"][i] += poultryScores[microDatabase["Poultry"][i]]
@@ -179,16 +193,16 @@ threshold = sum(quarterSubset) / len(quarterSubset)
 print("Threshold: ", threshold)
 
 # TODO: Do not forget to re-enable this part!
-#showGraph(microDatabase["Scores"], amoxResList, "Score", "Amoxycillin Resistance", "Amoxycillin Resistance vs Score")
+#showGraph(microDatabase["Scores"], antibioticResList, "Score", "Amoxycillin Resistance", "Amoxycillin Resistance vs Score")
 
 
 ####################### TEST SET #######################
-# TODO: Don't forget that the test set is below. This is just a comment for visualisation. No meaning.
+# Don't forget that the test set is below. This is just a comment for visualisation. No meaning.
 ####################### TEST SET #######################
 
 herdSizeList = []
 organicList = []
-amoxResList = []
+antibioticResList = []
 poultryList = []
 wasteMilkList = []
 weanList = []
@@ -210,7 +224,7 @@ with open('testSet.csv', 'r') as f:
     
     for row in reader:
         herdSize = row[headerRow.index("herd_size")]
-        amoxValue = row[headerRow.index(antibiotic)]
+        antibioticValue = row[headerRow.index(antibiotic)]
         organicValue = row[headerRow.index("organic")]
         poultryValues = row[headerRow.index("poultry")]
         wasteMilkValue = row[headerRow.index("anything_waste")]
@@ -227,7 +241,7 @@ with open('testSet.csv', 'r') as f:
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
-        amoxResList.append(True if amoxValue == '1' else False)
+        antibioticResList.append(True if antibioticValue == '1' else False)
         poultryList.append(int(poultryValues))
         wasteMilkList.append(int(wasteMilkValue))
         weanList.append(int(weanValue))
@@ -242,31 +256,41 @@ with open('testSet.csv', 'r') as f:
         clinicalMastitisList.append(clinicalMastitisValue) # Tenth
 
 result = {
-    "Amoxycillin Resistance": amoxResList,
+    "Amoxycillin Resistance": antibioticResList,
     "Score": [], 
     "Findings": []
 }
 
-# mal confidence zaaaaa xd
 confidence = 0
+score = 0
 
-for i in range(len(amoxResList)):
+for i in range(len(antibioticResList)):
+
     # Get scores for each characteristic
-    score = organicScores[organicList[i]] + herdSizeScores[herdSizeList[i]] + poultryScores[poultryList[i]]
-    score += wasteMilkScores[wasteMilkList[i]] + weanScores[weanList[i]] + animalSampleScores[animalSampledList[i]]
-    score += ctxMScores[ctxMList[i]] + weanedHeiferScores[weanedHeiferList[i]] + adultScores[adultList[i]]
-    score += dryScores[dryList[i]] + footPathScores[footPathList[i]] + ampCScores[ampCList[i]]
-    score += heiferWasteScores[heiferWasteList[i]] + clinicalMastitisScores[clinicalMastitisList[i]] # Eleventh
-
+    score += organicScores[organicList[i]] + \
+            herdSizeScores[herdSizeList[i]] + \
+            poultryScores[poultryList[i]] + \
+            wasteMilkScores[wasteMilkList[i]] + \
+            weanScores[weanList[i]] + \
+            animalSampleScores[animalSampledList[i]] + \
+            ctxMScores[ctxMList[i]] + \
+            weanedHeiferScores[weanedHeiferList[i]] + \
+            adultScores[adultList[i]] + \
+            dryScores[dryList[i]] + \
+            footPathScores[footPathList[i]] + \
+            ampCScores[ampCList[i]] + \
+            heiferWasteScores[heiferWasteList[i]] + \
+            clinicalMastitisScores[clinicalMastitisList[i]] # Eleventh
+    
     result["Score"].append(score)
 
     # Compare score to threshold
     result["Findings"].append(True if score >= threshold else False)
 
     # Compare findings to actual result
-    if result["Findings"][i] == amoxResList[i]:
+    if result["Findings"][i] == antibioticResList[i]:
         confidence += 1
     
 
 print(tabulate(result, headers="keys", tablefmt="github"))
-print(confidence / len(amoxResList) * 100)
+print(f"Confidence: {confidence / len(antibioticResList) * 100}%")
