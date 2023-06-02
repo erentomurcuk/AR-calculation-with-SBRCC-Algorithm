@@ -82,7 +82,10 @@ dryList = [] # dry
 footPathList = [] # footpath
 ampCList = [] # amp_c
 heiferWasteList = [] # heifers_waste
-clinicalMastitisList = [] # whichclinresp #First
+clinicalMastitisList = [] # whichclinresp
+firstMastitisList = [] #firstmastitis
+equineList = [] # equine
+totalCattleList = [] # total_cattle
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
 antibiotic = switch(int(antibioticInteger))
@@ -109,6 +112,9 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
         clinicalMastitisValue = row[headerRow.index("whichclinresp")] #Second
+        firstMastitisValue = row[headerRow.index("firstmastitis")]
+        equineValue = row[headerRow.index("equine")]
+        totalCattleValue = row[headerRow.index("total_cattle")]
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
@@ -125,6 +131,9 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         ampCList.append(int(ampCValue))
         heiferWasteList.append(int(heiferWasteValue))
         clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Third
+        firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
+        equineList.append(int(equineValue))
+        totalCattleList.append(int(totalCattleValue))
 
 microDatabase = {
     "Amoxycillin Resistance": antibioticResList,
@@ -142,6 +151,9 @@ microDatabase = {
     "Amp-C": ampCList,
     "Heifer Waste": heiferWasteList,
     "Clinical Mastitis": clinicalMastitisList, # Fourth
+    "First Mastitis": firstMastitisList,
+    "Equine": equineList,
+    "Total Cattle": totalCattleList,
     "Scores": []
 }
 
@@ -150,6 +162,8 @@ herdSizeNames = [1, 2, 3]
 weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
 clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"] # Fifth
+firstMastitisNames = ["Cobactan", "MastiplanLC", "OrbeninLA", "UbroYellow", "Ubrolexin", "amoxyclav", "tdmultiject"]
+
 
 organicScores = getScores(organicList, antibioticResList, binaryNames)
 herdSizeScores = getScores(herdSizeList, antibioticResList, herdSizeNames)
@@ -165,6 +179,9 @@ footPathScores = getScores(footPathList, antibioticResList, binaryNames)
 ampCScores = getScores(ampCList, antibioticResList, binaryNames)
 heiferWasteScores = getScores(heiferWasteList, antibioticResList, binaryNames)
 clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames) # Sixth
+firstMastitisScores = getScores(firstMastitisList, antibioticResList, firstMastitisNames)
+equineScores = getScores(equineList, antibioticResList, binaryNames)
+totalCattleScores = getScores(totalCattleList, antibioticResList, herdSizeNames)
 
 for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
@@ -181,6 +198,9 @@ for i in range(len(antibioticResList)):
     microDatabase["Scores"][i] += ampCScores[microDatabase["Amp-C"][i]]
     microDatabase["Scores"][i] += heiferWasteScores[microDatabase["Heifer Waste"][i]]
     microDatabase["Scores"][i] += clinicalMastitisScores[microDatabase["Clinical Mastitis"][i]] # Seventh
+    microDatabase["Scores"][i] += firstMastitisScores[microDatabase["First Mastitis"][i]]
+    microDatabase["Scores"][i] += equineScores[microDatabase["Equine"][i]]
+    microDatabase["Scores"][i] += totalCattleScores[microDatabase["Total Cattle"][i]]
     
 sortedScores = sorted(microDatabase["Scores"])
 quarterSubset = sortedScores[:int(len(sortedScores) / 5)]
@@ -215,6 +235,9 @@ footPathList = []
 ampCList = []
 heiferWasteList = []
 clinicalMastitisList = [] # Eighth
+firstMastitisList = []
+equineList = []
+totalCattleList = []
 
 with open('testSet.csv', 'r') as f:
     reader = csv.reader(f)
@@ -238,6 +261,9 @@ with open('testSet.csv', 'r') as f:
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
         clinicalMastitisValue = row[headerRow.index("whichclinresp")] # Ninth
+        firstMastitisValue = row[headerRow.index("firstmastitis")]
+        equineValue = row[headerRow.index("equine")]
+        totalCattleValue = row[headerRow.index("total_cattle")]
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
@@ -253,18 +279,21 @@ with open('testSet.csv', 'r') as f:
         footPathList.append(int(footPathValue))
         ampCList.append(int(ampCValue))
         heiferWasteList.append(int(heiferWasteValue))
-        clinicalMastitisList.append(clinicalMastitisValue) # Tenth
+        clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Tenth
+        firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
+        equineList.append(int(equineValue))
+        totalCattleList.append(int(totalCattleValue))
 
 result = {
-    "Amoxycillin Resistance": antibioticResList,
+    "Antibiotics Resistance": antibioticResList,
     "Score": [], 
     "Findings": []
 }
 
 confidence = 0
-score = 0
 
 for i in range(len(antibioticResList)):
+    score = 0
 
     # Get scores for each characteristic
     score += organicScores[organicList[i]] + \
@@ -280,7 +309,10 @@ for i in range(len(antibioticResList)):
             footPathScores[footPathList[i]] + \
             ampCScores[ampCList[i]] + \
             heiferWasteScores[heiferWasteList[i]] + \
-            clinicalMastitisScores[clinicalMastitisList[i]] # Eleventh
+            clinicalMastitisScores[clinicalMastitisList[i]] + \
+            firstMastitisScores[firstMastitisList[i]] + \
+            equineScores[equineList[i]] + \
+            totalCattleScores[totalCattleList[i]]
     
     result["Score"].append(score)
 
