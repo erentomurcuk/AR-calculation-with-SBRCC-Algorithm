@@ -86,11 +86,21 @@ clinicalMastitisList = [] # whichclinresp
 firstMastitisList = [] #firstmastitis
 equineList = [] # equine
 totalCattleList = [] # total_cattle
+yieldList = [] # yield
+pneumVaccList = [] # pneum_vacc
+diarrVaccList = [] # diarrvacc
+antiCoccList = [] # anticocc
+halocurList = [] # halocur
+nsaidList = [] # nsaiddiarr
+throughCleanList = [] # trough_clean
+timeDamList = [] # time_dam
+umSprayList = [] # um_spray
+patternList = [] # pattern
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
 antibiotic = switch(int(antibioticInteger))
 
-with open('dairy_farms_dataset.csv', 'r') as f:
+with open('trainSet.csv', 'r') as f:
     reader = csv.reader(f)
     
     # Skip the header row #
@@ -115,6 +125,16 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         firstMastitisValue = row[headerRow.index("firstmastitis")]
         equineValue = row[headerRow.index("equine")]
         totalCattleValue = row[headerRow.index("total_cattle")]
+        yieldValue = row[headerRow.index("yield")]
+        pneumVaccValue = row[headerRow.index("pneum_vacc")]
+        diarrVaccValue = row[headerRow.index("diarrvacc")]
+        antiCoccValue = row[headerRow.index("anticocc")]
+        halocurValue = row[headerRow.index("halocur")]
+        nsaidValue = row[headerRow.index("nsaiddiarr")]
+        throughCleanValue = row[headerRow.index("trough_clean")]
+        timeDamValue = row[headerRow.index("time_dam")]
+        umSprayValue = row[headerRow.index("um_spray")]
+        patternValue = row[headerRow.index("pattern")]
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
@@ -134,6 +154,16 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
         equineList.append(int(equineValue))
         totalCattleList.append(int(totalCattleValue))
+        yieldList.append(int(yieldValue))
+        pneumVaccList.append(int(pneumVaccValue))
+        diarrVaccList.append(0 if diarrVaccValue == 'N' else 1)
+        antiCoccList.append(int(antiCoccValue))
+        halocurList.append(int(halocurValue))
+        nsaidList.append(int(nsaidValue))
+        throughCleanList.append(int(throughCleanValue))
+        timeDamList.append(int(timeDamValue))
+        umSprayList.append(int(umSprayValue))
+        patternList.append(int(patternValue))
 
 microDatabase = {
     "Amoxycillin Resistance": antibioticResList,
@@ -154,11 +184,22 @@ microDatabase = {
     "First Mastitis": firstMastitisList,
     "Equine": equineList,
     "Total Cattle": totalCattleList,
+    "Yield": yieldList,
+    "Pneum Vacc": pneumVaccList,
+    "Diarr Vacc": diarrVaccList,
+    "Anti Cocc": antiCoccList,
+    "Halocur": halocurList,
+    "NSAID": nsaidList,
+    "Trough Clean": throughCleanList,
+    "Time Dam": timeDamList,
+    "Umbilicus Spray": umSprayList,
+    "Calving Pattern": patternList,
     "Scores": []
 }
 
 binaryNames = [0, 1]
-herdSizeNames = [1, 2, 3]
+ordinalNames = [1, 2]
+categoryNames = [1, 2, 3]
 weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
 clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"] # Fifth
@@ -166,7 +207,7 @@ firstMastitisNames = ["Cobactan", "MastiplanLC", "OrbeninLA", "UbroYellow", "Ubr
 
 
 organicScores = getScores(organicList, antibioticResList, binaryNames)
-herdSizeScores = getScores(herdSizeList, antibioticResList, herdSizeNames)
+herdSizeScores = getScores(herdSizeList, antibioticResList, categoryNames)
 poultryScores = getScores(poultryList, antibioticResList, binaryNames)
 wasteMilkScores = getScores(wasteMilkList, antibioticResList, binaryNames)
 weanScores = getScores(weanList, antibioticResList, weanNames)
@@ -181,7 +222,17 @@ heiferWasteScores = getScores(heiferWasteList, antibioticResList, binaryNames)
 clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames) # Sixth
 firstMastitisScores = getScores(firstMastitisList, antibioticResList, firstMastitisNames)
 equineScores = getScores(equineList, antibioticResList, binaryNames)
-totalCattleScores = getScores(totalCattleList, antibioticResList, herdSizeNames)
+totalCattleScores = getScores(totalCattleList, antibioticResList, categoryNames)
+yieldScores = getScores(yieldList, antibioticResList, categoryNames)
+pneumVaccScores = getScores(pneumVaccList, antibioticResList, binaryNames)
+diarrVaccScores = getScores(diarrVaccList, antibioticResList, binaryNames)
+antiCoccScores = getScores(antiCoccList, antibioticResList, binaryNames)
+halocurScores = getScores(halocurList, antibioticResList, binaryNames)
+nsaidScores = getScores(nsaidList, antibioticResList, binaryNames)
+throughCleanScores = getScores(throughCleanList, antibioticResList, ordinalNames)
+timeDamScores = getScores(timeDamList, antibioticResList, ordinalNames)
+umSprayScores = getScores(umSprayList, antibioticResList, binaryNames)
+patternScores = getScores(patternList, antibioticResList, ordinalNames)
 
 for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
@@ -201,6 +252,16 @@ for i in range(len(antibioticResList)):
     microDatabase["Scores"][i] += firstMastitisScores[microDatabase["First Mastitis"][i]]
     microDatabase["Scores"][i] += equineScores[microDatabase["Equine"][i]]
     microDatabase["Scores"][i] += totalCattleScores[microDatabase["Total Cattle"][i]]
+    microDatabase["Scores"][i] += yieldScores[microDatabase["Yield"][i]]
+    microDatabase["Scores"][i] += pneumVaccScores[microDatabase["Pneum Vacc"][i]]
+    microDatabase["Scores"][i] += diarrVaccScores[microDatabase["Diarr Vacc"][i]]
+    microDatabase["Scores"][i] += antiCoccScores[microDatabase["Anti Cocc"][i]]
+    microDatabase["Scores"][i] += halocurScores[microDatabase["Halocur"][i]]
+    microDatabase["Scores"][i] += nsaidScores[microDatabase["NSAID"][i]]
+    microDatabase["Scores"][i] += throughCleanScores[microDatabase["Trough Clean"][i]]
+    microDatabase["Scores"][i] += timeDamScores[microDatabase["Time Dam"][i]]
+    microDatabase["Scores"][i] += umSprayScores[microDatabase["Umbilicus Spray"][i]]
+    microDatabase["Scores"][i] += patternScores[microDatabase["Calving Pattern"][i]]
     
 sortedScores = sorted(microDatabase["Scores"])
 quarterSubset = sortedScores[:int(len(sortedScores) / 5)]
@@ -238,6 +299,16 @@ clinicalMastitisList = [] # Eighth
 firstMastitisList = []
 equineList = []
 totalCattleList = []
+yieldList = []
+pneumVaccList = []
+diarrVaccList = []
+antiCoccList = []
+halocurList = []
+nsaidList = []
+throughCleanList = []
+timeDamList = []
+umSprayList = []
+patternList = []
 
 with open('testSet.csv', 'r') as f:
     reader = csv.reader(f)
@@ -264,6 +335,16 @@ with open('testSet.csv', 'r') as f:
         firstMastitisValue = row[headerRow.index("firstmastitis")]
         equineValue = row[headerRow.index("equine")]
         totalCattleValue = row[headerRow.index("total_cattle")]
+        yieldValue = row[headerRow.index("yield")]
+        pneumVaccValue = row[headerRow.index("pneum_vacc")]
+        diarrVaccValue = row[headerRow.index("diarrvacc")]
+        antiCoccValue = row[headerRow.index("anticocc")]
+        halocurValue = row[headerRow.index("halocur")]
+        nsaidValue = row[headerRow.index("nsaiddiarr")]
+        throughCleanValue = row[headerRow.index("trough_clean")]
+        timeDamValue = row[headerRow.index("time_dam")]
+        umSprayValue = row[headerRow.index("um_spray")]
+        patternValue = row[headerRow.index("pattern")]
 
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
@@ -283,6 +364,16 @@ with open('testSet.csv', 'r') as f:
         firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
         equineList.append(int(equineValue))
         totalCattleList.append(int(totalCattleValue))
+        yieldList.append(int(yieldValue))
+        pneumVaccList.append(int(pneumVaccValue))
+        diarrVaccList.append(0 if diarrVaccValue == 'N' else 1)
+        antiCoccList.append(int(antiCoccValue))
+        halocurList.append(int(halocurValue))
+        nsaidList.append(int(nsaidValue))
+        throughCleanList.append(int(throughCleanValue))
+        timeDamList.append(int(timeDamValue))
+        umSprayList.append(int(umSprayValue))
+        patternList.append(int(patternValue))
 
 result = {
     "Antibiotics Resistance": antibioticResList,
@@ -312,7 +403,17 @@ for i in range(len(antibioticResList)):
             clinicalMastitisScores[clinicalMastitisList[i]] + \
             firstMastitisScores[firstMastitisList[i]] + \
             equineScores[equineList[i]] + \
-            totalCattleScores[totalCattleList[i]]
+            totalCattleScores[totalCattleList[i]] + \
+            yieldScores[yieldList[i]] + \
+            pneumVaccScores[pneumVaccList[i]] + \
+            diarrVaccScores[diarrVaccList[i]] + \
+            antiCoccScores[antiCoccList[i]] + \
+            halocurScores[halocurList[i]] + \
+            nsaidScores[nsaidList[i]] + \
+            throughCleanScores[throughCleanList[i]] + \
+            timeDamScores[timeDamList[i]] + \
+            umSprayScores[umSprayList[i]] + \
+            patternScores[patternList[i]]
     
     result["Score"].append(score)
 
