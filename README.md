@@ -23,11 +23,11 @@ Run this command in your terminal in order to download all required dependencies
 - Powershell (Microsoft Windows)
 
 ```Powershell
-pip install matplotlib numpy tabulate
+pip install -r requirements.txt
 ```
 
 - Bash/zsh (macOS/unix/linux)
 
 ```bash
-pip3 install matplotlib numpy tabulate
+pip3 install -r requirements.txt
 ```
