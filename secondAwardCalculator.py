@@ -1,4 +1,14 @@
-# Second calculation method of scoring
+# Primary project source code file for the capstone project code 1010393 of Bahçeşehir University
+# Currently this project is coded only for the data set available here: https://catalogue.ceh.ac.uk/id/c9bc537a-d1c5-43a0-b146-42c25d4e8160
+# Baytemur, Furkan Doğancan (github: Kaaleyah) & Tomurcuk, Ahmet Eren (github: erentomurcuk)
+
+# All rights reserved, 2023
+
+    # ♫ Victim of your certainty ♫
+    # ♫ And therefore, your doubt's not an option ♫
+    #                                TOOL - 7empest
+
+# To a bright future for both of us. It awaits us into a new world. To graduation! Skål! 🥂
 
 import csv
 from collections import Counter
@@ -68,6 +78,7 @@ def switch(aInt):
 ##### MAIN #####
 
 #) list name # name in .csv file
+# STEP 1: Create the lists for the specific columns
 animalSampledList = [] # animals_sampled
 herdSizeList = [] # herd_size
 organicList = [] # organic
@@ -82,7 +93,7 @@ dryList = [] # dry
 footPathList = [] # footpath
 ampCList = [] # amp_c
 heiferWasteList = [] # heifers_waste
-clinicalMastitisList = [] # whichclinresp #First
+clinicalMastitisList = [] # whichclinresp
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
 antibiotic = switch(int(antibioticInteger))
@@ -93,6 +104,7 @@ with open('dairy_farms_dataset.csv', 'r') as f:
     # Skip the header row #
     headerRow = next(reader)
     
+    # STEP 2: Get the data from the .csv file
     for row in reader:
         herdSize = row[headerRow.index("herd_size")]
         antibioticValue = row[headerRow.index(antibiotic)]
@@ -108,8 +120,9 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         footPathValue = row[headerRow.index("footpath")]
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
-        clinicalMastitisValue = row[headerRow.index("whichclinresp")] #Second
+        clinicalMastitisValue = row[headerRow.index("whichclinresp")]
 
+        # STEP 3: Append the data to the lists
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
         antibioticResList.append(True if antibioticValue == '1' else False)
@@ -124,8 +137,9 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         footPathList.append(int(footPathValue))
         ampCList.append(int(ampCValue))
         heiferWasteList.append(int(heiferWasteValue))
-        clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Third
+        clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum()))
 
+# STEP 4: Add the list into the microDatabase
 microDatabase = {
     "Amoxycillin Resistance": antibioticResList,
     "Herd Size": herdSizeList,
@@ -141,16 +155,19 @@ microDatabase = {
     "Foot Path": footPathList,
     "Amp-C": ampCList,
     "Heifer Waste": heiferWasteList,
-    "Clinical Mastitis": clinicalMastitisList, # Fourth
+    "Clinical Mastitis": clinicalMastitisList,
     "Scores": []
 }
 
+# Code below is for setting up the types of the data on the column. If required, new ones should be added.
+# STEP 5: Add the type of the data if it does not exist here
 binaryNames = [0, 1]
 herdSizeNames = [1, 2, 3]
 weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
-clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"] # Fifth
+clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"]
 
+# STEP 6: Get the scores for each column (xList, antibioticResList, xNames)
 organicScores = getScores(organicList, antibioticResList, binaryNames)
 herdSizeScores = getScores(herdSizeList, antibioticResList, herdSizeNames)
 poultryScores = getScores(poultryList, antibioticResList, binaryNames)
@@ -164,28 +181,27 @@ dryScores = getScores(dryList, antibioticResList, binaryNames)
 footPathScores = getScores(footPathList, antibioticResList, binaryNames)
 ampCScores = getScores(ampCList, antibioticResList, binaryNames)
 heiferWasteScores = getScores(heiferWasteList, antibioticResList, binaryNames)
-clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames) # Sixth
+clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames)
 
+# STEP 7: Add the scores to the microDatabase
 for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
-    microDatabase["Scores"][i] += herdSizeScores[microDatabase["Herd Size"][i]]
-    microDatabase["Scores"][i] += poultryScores[microDatabase["Poultry"][i]]
-    microDatabase["Scores"][i] += wasteMilkScores[microDatabase["Waste Milk"][i]]
-    microDatabase["Scores"][i] += weanScores[microDatabase["Wean"][i]]
-    microDatabase["Scores"][i] += animalSampleScores[microDatabase["Animal Sampled"][i]]
-    microDatabase["Scores"][i] += ctxMScores[microDatabase["CTX-M"][i]]
-    microDatabase["Scores"][i] += weanedHeiferScores[microDatabase["Weaned Heifer"][i]]
-    microDatabase["Scores"][i] += adultScores[microDatabase["Adult"][i]]
-    microDatabase["Scores"][i] += dryScores[microDatabase["Dry"][i]]
-    microDatabase["Scores"][i] += footPathScores[microDatabase["Foot Path"][i]]
-    microDatabase["Scores"][i] += ampCScores[microDatabase["Amp-C"][i]]
-    microDatabase["Scores"][i] += heiferWasteScores[microDatabase["Heifer Waste"][i]]
-    microDatabase["Scores"][i] += clinicalMastitisScores[microDatabase["Clinical Mastitis"][i]] # Seventh
+    microDatabase["Scores"][i] + herdSizeScores[microDatabase["Herd Size"][i]] + \
+        poultryScores[microDatabase["Poultry"][i]] + \
+        wasteMilkScores[microDatabase["Waste Milk"][i]] + \
+        weanScores[microDatabase["Wean"][i]] + \
+        animalSampleScores[microDatabase["Animal Sampled"][i]] + \
+        ctxMScores[microDatabase["CTX-M"][i]] + \
+        weanedHeiferScores[microDatabase["Weaned Heifer"][i]] + \
+        adultScores[microDatabase["Adult"][i]] + \
+        dryScores[microDatabase["Dry"][i]] + \
+        footPathScores[microDatabase["Foot Path"][i]] + \
+        ampCScores[microDatabase["Amp-C"][i]] + \
+        heiferWasteScores[microDatabase["Heifer Waste"][i]] + \
+        clinicalMastitisScores[microDatabase["Clinical Mastitis"][i]]
     
 sortedScores = sorted(microDatabase["Scores"])
 quarterSubset = sortedScores[:int(len(sortedScores) / 5)]
-
-# TODO: Fix point creation system, cannot pass 65.23
 
 # TODO: Pre-set threshold
 threshold = sum(quarterSubset) / len(quarterSubset)
@@ -200,6 +216,7 @@ print("Threshold: ", threshold)
 # Don't forget that the test set is below. This is just a comment for visualisation. No meaning.
 ####################### TEST SET #######################
 
+# STEP 8: Create the list for the test set
 herdSizeList = []
 organicList = []
 antibioticResList = []
@@ -214,7 +231,7 @@ dryList = []
 footPathList = []
 ampCList = []
 heiferWasteList = []
-clinicalMastitisList = [] # Eighth
+clinicalMastitisList = []
 
 with open('testSet.csv', 'r') as f:
     reader = csv.reader(f)
@@ -222,6 +239,7 @@ with open('testSet.csv', 'r') as f:
     # Skip the header row
     headerRow = next(reader)
     
+    # STEP 9: Set the column names for the value lists
     for row in reader:
         herdSize = row[headerRow.index("herd_size")]
         antibioticValue = row[headerRow.index(antibiotic)]
@@ -237,8 +255,9 @@ with open('testSet.csv', 'r') as f:
         footPathValue = row[headerRow.index("footpath")]
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
-        clinicalMastitisValue = row[headerRow.index("whichclinresp")] # Ninth
+        clinicalMastitisValue = row[headerRow.index("whichclinresp")]
 
+        # STEP 10: Append the values to the lists
         herdSizeList.append(int(herdSize))
         organicList.append(int(organicValue))
         antibioticResList.append(True if antibioticValue == '1' else False)
@@ -267,6 +286,7 @@ score = 0
 for i in range(len(antibioticResList)):
 
     # Get scores for each characteristic
+    # STEP 11: Add the scores for each characteristic
     score += organicScores[organicList[i]] + \
             herdSizeScores[herdSizeList[i]] + \
             poultryScores[poultryList[i]] + \
@@ -280,7 +300,7 @@ for i in range(len(antibioticResList)):
             footPathScores[footPathList[i]] + \
             ampCScores[ampCList[i]] + \
             heiferWasteScores[heiferWasteList[i]] + \
-            clinicalMastitisScores[clinicalMastitisList[i]] # Eleventh
+            clinicalMastitisScores[clinicalMastitisList[i]]
     
     result["Score"].append(score)
 
