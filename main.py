@@ -1,5 +1,5 @@
 # Primary project source code file for the capstone project code 1010393 of Bahçeşehir University
-# Currently this project is coded only for the data set available here: https://catalogue.ceh.ac.uk/id/c9bc537a-d1c5-43a0-b146-42c25d4e8160
+# This project is coded only for the data set available here: https://catalogue.ceh.ac.uk/id/c9bc537a-d1c5-43a0-b146-42c25d4e8160
 # Baytemur, Furkan Doğancan (github: Kaaleyah) & Tomurcuk, Ahmet Eren (github: erentomurcuk)
 
 # All rights reserved, 2023
@@ -94,6 +94,8 @@ footPathList = [] # footpath
 ampCList = [] # amp_c
 heiferWasteList = [] # heifers_waste
 clinicalMastitisList = [] # whichclinresp
+equineList = [] # equine
+totalCattleList = [] # total_cattle
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
 antibiotic = switch(int(antibioticInteger))
@@ -121,6 +123,8 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
         clinicalMastitisValue = row[headerRow.index("whichclinresp")]
+        equineValue = row[headerRow.index("equine")]
+        totalCattleValue = row[headerRow.index("total_cattle")]
 
         # STEP 3: Append the data to the lists
         herdSizeList.append(int(herdSize))
@@ -138,6 +142,8 @@ with open('dairy_farms_dataset.csv', 'r') as f:
         ampCList.append(int(ampCValue))
         heiferWasteList.append(int(heiferWasteValue))
         clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum()))
+        equineList.append(int(equineValue))
+        totalCattleList.append(int(totalCattleValue))
 
 # STEP 4: Add the list into the microDatabase
 microDatabase = {
@@ -156,6 +162,9 @@ microDatabase = {
     "Amp-C": ampCList,
     "Heifer Waste": heiferWasteList,
     "Clinical Mastitis": clinicalMastitisList,
+    "Equine": equineList,
+    "Total Cattle": totalCattleList,
+
     "Scores": []
 }
 
@@ -166,6 +175,7 @@ herdSizeNames = [1, 2, 3]
 weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
 clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"]
+totalCattleNames = [1, 2, 3]
 
 # STEP 6: Get the scores for each column (xList, antibioticResList, xNames)
 organicScores = getScores(organicList, antibioticResList, binaryNames)
@@ -182,6 +192,8 @@ footPathScores = getScores(footPathList, antibioticResList, binaryNames)
 ampCScores = getScores(ampCList, antibioticResList, binaryNames)
 heiferWasteScores = getScores(heiferWasteList, antibioticResList, binaryNames)
 clinicalMastitisScores = getScores(clinicalMastitisList, antibioticResList, clinicalMastitisNames)
+equineScores = getScores(equineList, antibioticResList, binaryNames)
+totalCattleScores = getScores(totalCattleList, antibioticResList, totalCattleNames)
 
 # STEP 7: Add the scores to the microDatabase
 for i in range(len(antibioticResList)):
@@ -198,7 +210,9 @@ for i in range(len(antibioticResList)):
         footPathScores[microDatabase["Foot Path"][i]] + \
         ampCScores[microDatabase["Amp-C"][i]] + \
         heiferWasteScores[microDatabase["Heifer Waste"][i]] + \
-        clinicalMastitisScores[microDatabase["Clinical Mastitis"][i]]
+        clinicalMastitisScores[microDatabase["Clinical Mastitis"][i]] + \
+        equineScores[microDatabase["Equine"][i]] + \
+        totalCattleScores[microDatabase["Total Cattle"][i]]
     
 sortedScores = sorted(microDatabase["Scores"])
 quarterSubset = sortedScores[:int(len(sortedScores) / 5)]
@@ -232,6 +246,8 @@ footPathList = []
 ampCList = []
 heiferWasteList = []
 clinicalMastitisList = []
+equineList = []
+totalCattleList = []
 
 with open('testSet.csv', 'r') as f:
     reader = csv.reader(f)
@@ -256,6 +272,8 @@ with open('testSet.csv', 'r') as f:
         ampCValue = row[headerRow.index("amp_c")]
         heiferWasteValue = row[headerRow.index("heifers_waste")]
         clinicalMastitisValue = row[headerRow.index("whichclinresp")]
+        equineValue = row[headerRow.index("equine")]
+        totalCattleValue = row[headerRow.index("total_cattle")]
 
         # STEP 10: Append the values to the lists
         herdSizeList.append(int(herdSize))
@@ -272,7 +290,9 @@ with open('testSet.csv', 'r') as f:
         footPathList.append(int(footPathValue))
         ampCList.append(int(ampCValue))
         heiferWasteList.append(int(heiferWasteValue))
-        clinicalMastitisList.append(clinicalMastitisValue) # Tenth
+        clinicalMastitisList.append(clinicalMastitisValue)
+        equineList.append(int(equineValue))
+        totalCattleList.append(int(totalCattleValue))
 
 result = {
     "Amoxycillin Resistance": antibioticResList,
@@ -300,7 +320,9 @@ for i in range(len(antibioticResList)):
             footPathScores[footPathList[i]] + \
             ampCScores[ampCList[i]] + \
             heiferWasteScores[heiferWasteList[i]] + \
-            clinicalMastitisScores[clinicalMastitisList[i]]
+            clinicalMastitisScores[clinicalMastitisList[i]] + \
+            equineScores[equineList[i]] + \
+            totalCattleScores[totalCattleList[i]]
     
     result["Score"].append(score)
 
@@ -311,6 +333,5 @@ for i in range(len(antibioticResList)):
     if result["Findings"][i] == antibioticResList[i]:
         confidence += 1
     
-
 print(tabulate(result, headers="keys", tablefmt="github"))
 print(f"Confidence: {confidence / len(antibioticResList) * 100}%")
