@@ -54,7 +54,7 @@ def getScores(charList, resistantList, charNames):
     sortedResCounter = dict(sorted(Counter(charList).items(), key=lambda item: item[0]))
 
     for i in zip(sortedCharCounter.values(), sortedResCounter.values(), charNames):
-        result = (i[0] / i[1] * 100)
+        result = (i[0] / i[1] * 1000)
 
         #print(f"{i[2]}: {result}")
         scores[i[2]] = result
@@ -79,10 +79,10 @@ def switch(aInt):
 
 #) list name # name in .csv file
 # STEP 1: Create the lists for the specific columns
+antibioticResList = [] # amoxR
 animalSampledList = [] # animals_sampled
 herdSizeList = [] # herd_size
 organicList = [] # organic
-antibioticResList = [] # amoxR
 poultryList = [] # poultry
 wasteMilkList = [] # anything_waste
 weanList = [] # wean
@@ -107,74 +107,175 @@ throughCleanList = [] # trough_clean
 timeDamList = [] # time_dam
 umSprayList = [] # um_spray
 patternList = [] # pattern
+colostrumList = [] # give_col
+calvingGroupList = [] # calving_group
+calfHousingTypeList = [] # calhousing_type
+calfHousingOlderList = [] # calhousing_older
+othergrazeList = [] # othergraze
+bvdList = [] # bvdvacc
+ibrList = [] # ibrvacc
+leptoList = [] # leptovacc
+salmList = [] # salmvacc
+lungList = [] # lungvacc
+clostList = [] # clostvacc
+treatFootList = [] # treatfoot
+abCalveList = [] # abcalve
+nsaidCalveList = [] # nsaidcalve
+calveCleanList = [] # calveclean
+milkGrazeList = [] # milkgraze
+limeList = [] # lime
+predipList = [] # predip
+acfList = [] # acf
+cleanClusterList = [] # cleancluster
+dryTroughList = [] # drytrough
+premisesList = [] # premises
+showsList = [] # shows
+marketList = [] # market
+hostFarmWalkList = [] # hostfarmwalk
+starlingList = [] # starling
+deerList = [] # deer
+badgerList = [] # badger
+rookList = [] # rook
+pigeonList = [] # pigeon
+foxList = [] # fox
+pheasantList = [] # pheasant
+
+def fetchColumns(fileName):
+    with open(fileName, 'r') as f:
+        reader = csv.reader(f)
+        
+        # Skip the header row #
+        headerRow = next(reader)
+        
+        for row in reader:
+            herdSize = row[headerRow.index("herd_size")]
+            antibioticValue = row[headerRow.index(antibiotic)]
+            organicValue = row[headerRow.index("organic")]
+            poultryValues = row[headerRow.index("poultry")]
+            wasteMilkValue = row[headerRow.index("anything_waste")]
+            weanValue = row[headerRow.index("wean")]
+            animalSampleValue = row[headerRow.index("animals_sampled")]
+            ctxMValue = row[headerRow.index("ctx_m")]
+            weanedHeiferValue = row[headerRow.index("weaned_heifer")]
+            adultValue = row[headerRow.index("adult")]
+            dryValue = row[headerRow.index("dry")]
+            footPathValue = row[headerRow.index("footpath")]
+            ampCValue = row[headerRow.index("amp_c")]
+            heiferWasteValue = row[headerRow.index("heifers_waste")]
+            clinicalMastitisValue = row[headerRow.index("whichclinresp")] #Second
+            firstMastitisValue = row[headerRow.index("firstmastitis")]
+            equineValue = row[headerRow.index("equine")]
+            totalCattleValue = row[headerRow.index("total_cattle")]
+            yieldValue = row[headerRow.index("yield")]
+            pneumVaccValue = row[headerRow.index("pneum_vacc")]
+            diarrVaccValue = row[headerRow.index("diarrvacc")]
+            antiCoccValue = row[headerRow.index("anticocc")]
+            halocurValue = row[headerRow.index("halocur")]
+            nsaidValue = row[headerRow.index("nsaiddiarr")]
+            throughCleanValue = row[headerRow.index("trough_clean")]
+            timeDamValue = row[headerRow.index("time_dam")]
+            umSprayValue = row[headerRow.index("um_spray")]
+            patternValue = row[headerRow.index("pattern")]
+            colostrumValue = row[headerRow.index("give_col")]
+            calvingGroupValue = row[headerRow.index("calving_group")]
+            calfHousingTypeValue = row[headerRow.index("calhousing_type")]
+            calfHousingOlderValue = row[headerRow.index("calhousing_older")]
+            othergrazeValue = row[headerRow.index("othergraze")]
+            bvdValue = row[headerRow.index("bvdvacc")]
+            ibrValue = row[headerRow.index("ibrvacc")]
+            leptoValue = row[headerRow.index("leptovacc")]
+            salmValue = row[headerRow.index("salmvacc")]
+            lungValue = row[headerRow.index("lungvacc")]
+            clostValue = row[headerRow.index("clostvacc")]
+            treatFootValue = row[headerRow.index("treatfoot")]
+            abCalveValue = row[headerRow.index("abcalve")]
+            nsaidCalveValue = row[headerRow.index("nsaidcalve")]
+            calveCleanValue = row[headerRow.index("calveclean")]
+            milkGrazeValue = row[headerRow.index("milkgraze")]
+            limeValue = row[headerRow.index("lime")]
+            predipValue = row[headerRow.index("predip")]
+            acfValue = row[headerRow.index("acf")]
+            cleanClusterValue = row[headerRow.index("cleancluster")]
+            dryTroughValue = row[headerRow.index("drytrough")]
+            premisesValue = row[headerRow.index("premises")]
+            showsValue = row[headerRow.index("shows")]
+            marketValue = row[headerRow.index("market")]
+            hostFarmWalkValue = row[headerRow.index("hostfarmwalk")]
+            starlingValue = row[headerRow.index("starling")]
+            deerValue = row[headerRow.index("deer")]
+            badgerValue = row[headerRow.index("badger")]
+            rookValue = row[headerRow.index("rook")]
+            pigeonValue = row[headerRow.index("pigeon")]
+            foxValue = row[headerRow.index("fox")]
+            pheasantValue = row[headerRow.index("pheasant")]
+
+            herdSizeList.append(int(herdSize))
+            organicList.append(int(organicValue))
+            antibioticResList.append(True if antibioticValue == '1' else False)
+            poultryList.append(int(poultryValues))
+            wasteMilkList.append(int(wasteMilkValue))
+            weanList.append(int(weanValue))
+            animalSampledList.append(animalSampleValue)
+            ctxMList.append(int(ctxMValue))
+            weanedHeiferList.append(int(weanedHeiferValue))
+            adultList.append(int(adultValue))
+            dryList.append(int(dryValue))
+            footPathList.append(int(footPathValue))
+            ampCList.append(int(ampCValue))
+            heiferWasteList.append(int(heiferWasteValue))
+            clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Third
+            firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
+            equineList.append(int(equineValue))
+            totalCattleList.append(int(totalCattleValue))
+            yieldList.append(int(yieldValue))
+            pneumVaccList.append(int(pneumVaccValue))
+            diarrVaccList.append(0 if diarrVaccValue == 'N' else 1)
+            antiCoccList.append(int(antiCoccValue))
+            halocurList.append(int(halocurValue))
+            nsaidList.append(int(nsaidValue))
+            throughCleanList.append(int(throughCleanValue))
+            timeDamList.append(int(timeDamValue))
+            umSprayList.append(int(umSprayValue))
+            patternList.append(int(patternValue))
+            colostrumList.append(int(colostrumValue))
+            calvingGroupList.append(int(calvingGroupValue))
+            calfHousingTypeList.append(int(calfHousingTypeValue))
+            calfHousingOlderList.append(int(calfHousingOlderValue))
+            othergrazeList.append(0 if othergrazeValue == 'N' else 1)
+            bvdList.append(0 if bvdValue == 'N' else 1)
+            ibrList.append(0 if ibrValue == 'N' else 1)
+            leptoList.append(0 if leptoValue == 'N' else 1)
+            salmList.append(0 if salmValue == 'N' else 1)
+            lungList.append(0 if lungValue == 'N' else 1)
+            clostList.append(0 if clostValue == 'N' else 1)
+            treatFootList.append(int(treatFootValue))
+            abCalveList.append(int(abCalveValue))
+            nsaidCalveList.append(int(nsaidCalveValue))
+            calveCleanList.append(int(calveCleanValue))
+            milkGrazeList.append(int(milkGrazeValue))
+            limeList.append(int(limeValue))
+            predipList.append(int(predipValue))
+            acfList.append(int(acfValue))
+            cleanClusterList.append(int(cleanClusterValue))
+            dryTroughList.append(int(dryTroughValue))
+            premisesList.append(int(premisesValue))
+            showsList.append(int(showsValue))
+            marketList.append(int(marketValue))
+            hostFarmWalkList.append(int(hostFarmWalkValue))
+            starlingList.append(int(starlingValue))
+            deerList.append(int(deerValue))
+            badgerList.append(int(badgerValue))
+            rookList.append(int(rookValue))
+            pigeonList.append(int(pigeonValue))
+            foxList.append(int(foxValue))
+            pheasantList.append(int(pheasantValue))
+
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
 antibiotic = switch(int(antibioticInteger))
 
-with open('trainSet.csv', 'r') as f:
-    reader = csv.reader(f)
-    
-    # Skip the header row #
-    headerRow = next(reader)
-    
-    for row in reader:
-        herdSize = row[headerRow.index("herd_size")]
-        antibioticValue = row[headerRow.index(antibiotic)]
-        organicValue = row[headerRow.index("organic")]
-        poultryValues = row[headerRow.index("poultry")]
-        wasteMilkValue = row[headerRow.index("anything_waste")]
-        weanValue = row[headerRow.index("wean")]
-        animalSampleValue = row[headerRow.index("animals_sampled")]
-        ctxMValue = row[headerRow.index("ctx_m")]
-        weanedHeiferValue = row[headerRow.index("weaned_heifer")]
-        adultValue = row[headerRow.index("adult")]
-        dryValue = row[headerRow.index("dry")]
-        footPathValue = row[headerRow.index("footpath")]
-        ampCValue = row[headerRow.index("amp_c")]
-        heiferWasteValue = row[headerRow.index("heifers_waste")]
-        clinicalMastitisValue = row[headerRow.index("whichclinresp")] #Second
-        firstMastitisValue = row[headerRow.index("firstmastitis")]
-        equineValue = row[headerRow.index("equine")]
-        totalCattleValue = row[headerRow.index("total_cattle")]
-        yieldValue = row[headerRow.index("yield")]
-        pneumVaccValue = row[headerRow.index("pneum_vacc")]
-        diarrVaccValue = row[headerRow.index("diarrvacc")]
-        antiCoccValue = row[headerRow.index("anticocc")]
-        halocurValue = row[headerRow.index("halocur")]
-        nsaidValue = row[headerRow.index("nsaiddiarr")]
-        throughCleanValue = row[headerRow.index("trough_clean")]
-        timeDamValue = row[headerRow.index("time_dam")]
-        umSprayValue = row[headerRow.index("um_spray")]
-        patternValue = row[headerRow.index("pattern")]
-
-        herdSizeList.append(int(herdSize))
-        organicList.append(int(organicValue))
-        antibioticResList.append(True if antibioticValue == '1' else False)
-        poultryList.append(int(poultryValues))
-        wasteMilkList.append(int(wasteMilkValue))
-        weanList.append(int(weanValue))
-        animalSampledList.append(animalSampleValue)
-        ctxMList.append(int(ctxMValue))
-        weanedHeiferList.append(int(weanedHeiferValue))
-        adultList.append(int(adultValue))
-        dryList.append(int(dryValue))
-        footPathList.append(int(footPathValue))
-        ampCList.append(int(ampCValue))
-        heiferWasteList.append(int(heiferWasteValue))
-        clinicalMastitisList.append(''.join(e for e in clinicalMastitisValue if e.isalnum())) #Third
-        firstMastitisList.append(''.join(e for e in firstMastitisValue if e.isalnum()))
-        equineList.append(int(equineValue))
-        totalCattleList.append(int(totalCattleValue))
-        yieldList.append(int(yieldValue))
-        pneumVaccList.append(int(pneumVaccValue))
-        diarrVaccList.append(0 if diarrVaccValue == 'N' else 1)
-        antiCoccList.append(int(antiCoccValue))
-        halocurList.append(int(halocurValue))
-        nsaidList.append(int(nsaidValue))
-        throughCleanList.append(int(throughCleanValue))
-        timeDamList.append(int(timeDamValue))
-        umSprayList.append(int(umSprayValue))
-        patternList.append(int(patternValue))
+# Fetch from training data #
+fetchColumns("trainSet.csv")
 
 microDatabase = {
     "Amoxycillin Resistance": antibioticResList,
@@ -205,6 +306,38 @@ microDatabase = {
     "Time Dam": timeDamList,
     "Umbilicus Spray": umSprayList,
     "Calving Pattern": patternList,
+    "Colostrum": colostrumList,
+    "Calving Group": calvingGroupList,
+    "Calf Housing Type": calfHousingTypeList,
+    "Calf Housing Older": calfHousingOlderList,
+    "Other Grazing": othergrazeList,
+    "BVD Vaccination": bvdList,
+    "IBR Vaccination": ibrList,
+    "Lepto Vaccination": leptoList,
+    "Salmonella Vaccination": salmList,
+    "Lungworm Vaccination": lungList,
+    "Clostridial Vaccination": clostList,
+    "Treat Foot": treatFootList,
+    "Antibiotics at Calving": abCalveList,
+    "NSAID at Calving": nsaidCalveList,
+    "Calving Area Clean": calveCleanList,
+    "Milking Cow Graze": milkGrazeList,
+    "Lime": limeList,
+    "Predip": predipList,
+    "Automatic Cluster Flush": acfList,
+    "Clean Cluster": cleanClusterList,
+    "Dry Cow Trough": dryTroughList,
+    "Premises": premisesList,
+    "Shows": showsList,
+    "Market": marketList,
+    "Host Farm Walk": hostFarmWalkList,
+    "Starling": starlingList,
+    "Deer": deerList,
+    "Badger": badgerList,
+    "Rook": rookList,
+    "Pigeon": pigeonList,
+    "Fox": foxList,
+    "Pheasant": pheasantList,
     "Scores": []
 }
 
@@ -244,6 +377,38 @@ throughCleanScores = getScores(throughCleanList, antibioticResList, ordinalNames
 timeDamScores = getScores(timeDamList, antibioticResList, ordinalNames)
 umSprayScores = getScores(umSprayList, antibioticResList, binaryNames)
 patternScores = getScores(patternList, antibioticResList, ordinalNames)
+colostrumScores = getScores(colostrumList, antibioticResList, binaryNames)
+calvingGroupScores = getScores(calvingGroupList, antibioticResList, binaryNames)
+calfHousingTypeScores = getScores(calfHousingTypeList, antibioticResList, categoryNames)
+calfHousingOlderScores = getScores(calfHousingOlderList, antibioticResList, binaryNames)
+othergrazeScores = getScores(othergrazeList, antibioticResList, binaryNames)
+bvdScores = getScores(bvdList, antibioticResList, binaryNames)
+ibrScores = getScores(ibrList, antibioticResList, binaryNames)
+leptoScores = getScores(leptoList, antibioticResList, binaryNames)
+salmScores = getScores(salmList, antibioticResList, binaryNames)
+lungScores = getScores(lungList, antibioticResList, binaryNames)
+clostScores = getScores(clostList, antibioticResList, binaryNames)
+treatFootScores = getScores(treatFootList, antibioticResList, binaryNames)
+abCalveScores = getScores(abCalveList, antibioticResList, binaryNames)
+nsaidCalveScores = getScores(nsaidCalveList, antibioticResList, binaryNames)
+calveCleanScores = getScores(calveCleanList, antibioticResList, ordinalNames)
+milkGrazeScores = getScores(milkGrazeList, antibioticResList, binaryNames)
+limeScores = getScores(limeList, antibioticResList, binaryNames)
+predipScores = getScores(predipList, antibioticResList, binaryNames)
+acfScores = getScores(acfList, antibioticResList, binaryNames)
+cleanClusterScores = getScores(cleanClusterList, antibioticResList, ordinalNames)
+dryTroughScores = getScores(dryTroughList, antibioticResList, ordinalNames)
+premisesScores = getScores(premisesList, antibioticResList, ordinalNames)
+showsScores = getScores(showsList, antibioticResList, binaryNames)
+marketScores = getScores(marketList, antibioticResList, binaryNames)
+hostFarmWalkScores = getScores(hostFarmWalkList, antibioticResList, binaryNames)
+starlingScores = getScores(starlingList, antibioticResList, ordinalNames)
+deerScores = getScores(deerList, antibioticResList, ordinalNames)
+badgerScores = getScores(badgerList, antibioticResList, ordinalNames)
+rookScores = getScores(rookList, antibioticResList, ordinalNames)
+pigeonScores = getScores(pigeonList, antibioticResList, ordinalNames)
+foxScores = getScores(foxList, antibioticResList, ordinalNames)
+pheasantScores = getScores(pheasantList, antibioticResList, ordinalNames)
 
 for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
@@ -273,16 +438,47 @@ for i in range(len(antibioticResList)):
     microDatabase["Scores"][i] += timeDamScores[microDatabase["Time Dam"][i]]
     microDatabase["Scores"][i] += umSprayScores[microDatabase["Umbilicus Spray"][i]]
     microDatabase["Scores"][i] += patternScores[microDatabase["Calving Pattern"][i]]
+    microDatabase["Scores"][i] += colostrumScores[microDatabase["Colostrum"][i]]
+    microDatabase["Scores"][i] += calvingGroupScores[microDatabase["Calving Group"][i]]
+    microDatabase["Scores"][i] += calfHousingTypeScores[microDatabase["Calf Housing Type"][i]]
+    microDatabase["Scores"][i] += calfHousingOlderScores[microDatabase["Calf Housing Older"][i]]
+    microDatabase["Scores"][i] += othergrazeScores[microDatabase["Other Grazing"][i]]
+    microDatabase["Scores"][i] += bvdScores[microDatabase["BVD Vaccination"][i]]
+    microDatabase["Scores"][i] += ibrScores[microDatabase["IBR Vaccination"][i]]
+    microDatabase["Scores"][i] += leptoScores[microDatabase["Lepto Vaccination"][i]]
+    microDatabase["Scores"][i] += salmScores[microDatabase["Salmonella Vaccination"][i]]
+    microDatabase["Scores"][i] += lungScores[microDatabase["Lungworm Vaccination"][i]]
+    microDatabase["Scores"][i] += clostScores[microDatabase["Clostridial Vaccination"][i]]
+    microDatabase["Scores"][i] += treatFootScores[microDatabase["Treat Foot"][i]]
+    microDatabase["Scores"][i] += abCalveScores[microDatabase["Antibiotics at Calving"][i]]
+    microDatabase["Scores"][i] += nsaidCalveScores[microDatabase["NSAID at Calving"][i]]
+    microDatabase["Scores"][i] += calveCleanScores[microDatabase["Calving Area Clean"][i]]
+    microDatabase["Scores"][i] += milkGrazeScores[microDatabase["Milking Cow Graze"][i]]
+    microDatabase["Scores"][i] += limeScores[microDatabase["Lime"][i]]
+    microDatabase["Scores"][i] += predipScores[microDatabase["Predip"][i]]
+    microDatabase["Scores"][i] += acfScores[microDatabase["Automatic Cluster Flush"][i]]
+    microDatabase["Scores"][i] += cleanClusterScores[microDatabase["Clean Cluster"][i]]
+    microDatabase["Scores"][i] += dryTroughScores[microDatabase["Dry Cow Trough"][i]]
+    microDatabase["Scores"][i] += premisesScores[microDatabase["Premises"][i]]
+    microDatabase["Scores"][i] += showsScores[microDatabase["Shows"][i]]
+    microDatabase["Scores"][i] += marketScores[microDatabase["Market"][i]]
+    microDatabase["Scores"][i] += hostFarmWalkScores[microDatabase["Host Farm Walk"][i]]
+    microDatabase["Scores"][i] += starlingScores[microDatabase["Starling"][i]]
+    microDatabase["Scores"][i] += deerScores[microDatabase["Deer"][i]]
+    microDatabase["Scores"][i] += badgerScores[microDatabase["Badger"][i]]
+    microDatabase["Scores"][i] += rookScores[microDatabase["Rook"][i]]
+    microDatabase["Scores"][i] += pigeonScores[microDatabase["Pigeon"][i]]
+    microDatabase["Scores"][i] += foxScores[microDatabase["Fox"][i]]
+    microDatabase["Scores"][i] += pheasantScores[microDatabase["Pheasant"][i]]
     
 sortedScores = sorted(microDatabase["Scores"])
-quarterSubset = sortedScores[:int(len(sortedScores) / 5)]
+quarterSubset = sortedScores[:int(len(sortedScores) / 10)]
 
 # TODO: Fix point creation system, cannot pass 65.23
 
 # TODO: Pre-set threshold
 threshold = sum(quarterSubset) / len(quarterSubset)
-#threshold = 200
-print("Threshold: ", threshold)
+#threshold = 3000
 
 # TODO: Do not forget to re-enable this part!
 #showGraph(microDatabase["Scores"], antibioticResList, "Score", "Amoxycillin Resistance", "Amoxycillin Resistance vs Score")
@@ -320,45 +516,41 @@ throughCleanList = []
 timeDamList = []
 umSprayList = []
 patternList = []
+colostrumList = []
+calvingGroupList = []
+calfHousingTypeList = []
+calfHousingOlderList = []
+othergrazeList = []
+bvdList = []
+ibrList = []
+leptoList = []
+salmList = []
+lungList = []
+clostList = []
+treatFootList = []
+abCalveList = []
+nsaidCalveList = []
+calveCleanList = []
+milkGrazeList = []
+limeList = []
+predipList = []
+acfList = []
+cleanClusterList = []
+dryTroughList = []
+premisesList = []
+showsList = []
+marketList = []
+hostFarmWalkList = []
+starlingList = []
+deerList = []
+badgerList = []
+rookList = []
+pigeonList = []
+foxList = []
+pheasantList = []
 
-with open('testSet.csv', 'r') as f:
-    reader = csv.reader(f)
-    
-    # Skip the header row
-    headerRow = next(reader)
-    
-    for row in reader:
-        herdSize = row[headerRow.index("herd_size")]
-        antibioticValue = row[headerRow.index(antibiotic)]
-        organicValue = row[headerRow.index("organic")]
-        poultryValues = row[headerRow.index("poultry")]
-        wasteMilkValue = row[headerRow.index("anything_waste")]
-        weanValue = row[headerRow.index("wean")]
-        animalSampleValue = row[headerRow.index("animals_sampled")]
-        ctxMValue = row[headerRow.index("ctx_m")]
-        weanedHeiferValue = row[headerRow.index("weaned_heifer")]
-        adultValue = row[headerRow.index("adult")]
-        dryValue = row[headerRow.index("dry")]
-        footPathValue = row[headerRow.index("footpath")]
-        ampCValue = row[headerRow.index("amp_c")]
-        heiferWasteValue = row[headerRow.index("heifers_waste")]
-        clinicalMastitisValue = row[headerRow.index("whichclinresp")] # Ninth
-
-        herdSizeList.append(int(herdSize))
-        organicList.append(int(organicValue))
-        antibioticResList.append(True if antibioticValue == '1' else False)
-        poultryList.append(int(poultryValues))
-        wasteMilkList.append(int(wasteMilkValue))
-        weanList.append(int(weanValue))
-        animalSampledList.append(animalSampleValue)
-        ctxMList.append(int(ctxMValue))
-        weanedHeiferList.append(int(weanedHeiferValue))
-        adultList.append(int(adultValue))
-        dryList.append(int(dryValue))
-        footPathList.append(int(footPathValue))
-        ampCList.append(int(ampCValue))
-        heiferWasteList.append(int(heiferWasteValue))
-        clinicalMastitisList.append(clinicalMastitisValue) # Tenth
+# Fetch for test set
+fetchColumns("testSet.csv")
 
 result = {
     "Amoxycillin Resistance": antibioticResList,
@@ -367,9 +559,9 @@ result = {
 }
 
 confidence = 0
-score = 0
 
 for i in range(len(antibioticResList)):
+    score = 0
 
     # Get scores for each characteristic
     score += organicScores[organicList[i]] + \
@@ -385,7 +577,52 @@ for i in range(len(antibioticResList)):
             footPathScores[footPathList[i]] + \
             ampCScores[ampCList[i]] + \
             heiferWasteScores[heiferWasteList[i]] + \
-            clinicalMastitisScores[clinicalMastitisList[i]] # Eleventh
+            clinicalMastitisScores[clinicalMastitisList[i]] + \
+            firstMastitisScores[firstMastitisList[i]] + \
+            equineScores[equineList[i]] + \
+            totalCattleScores[totalCattleList[i]] + \
+            yieldScores[yieldList[i]] + \
+            pneumVaccScores[pneumVaccList[i]] + \
+            diarrVaccScores[diarrVaccList[i]] + \
+            antiCoccScores[antiCoccList[i]] + \
+            halocurScores[halocurList[i]] + \
+            nsaidScores[nsaidList[i]] + \
+            throughCleanScores[throughCleanList[i]] + \
+            timeDamScores[timeDamList[i]] + \
+            umSprayScores[umSprayList[i]] + \
+            patternScores[patternList[i]] + \
+            colostrumScores[colostrumList[i]] + \
+            calvingGroupScores[calvingGroupList[i]] + \
+            calfHousingTypeScores[calfHousingTypeList[i]] + \
+            calfHousingOlderScores[calfHousingOlderList[i]] + \
+            othergrazeScores[othergrazeList[i]] + \
+            bvdScores[bvdList[i]] + \
+            ibrScores[ibrList[i]] + \
+            leptoScores[leptoList[i]] + \
+            salmScores[salmList[i]] + \
+            lungScores[lungList[i]] + \
+            clostScores[clostList[i]] + \
+            treatFootScores[treatFootList[i]] + \
+            abCalveScores[abCalveList[i]] + \
+            nsaidCalveScores[nsaidCalveList[i]] + \
+            calveCleanScores[calveCleanList[i]] + \
+            milkGrazeScores[milkGrazeList[i]] + \
+            limeScores[limeList[i]] + \
+            predipScores[predipList[i]] + \
+            acfScores[acfList[i]] + \
+            cleanClusterScores[cleanClusterList[i]] + \
+            dryTroughScores[dryTroughList[i]] + \
+            premisesScores[premisesList[i]] + \
+            showsScores[showsList[i]] + \
+            marketScores[marketList[i]] + \
+            hostFarmWalkScores[hostFarmWalkList[i]] + \
+            starlingScores[starlingList[i]] + \
+            deerScores[deerList[i]] + \
+            badgerScores[badgerList[i]] + \
+            rookScores[rookList[i]] + \
+            pigeonScores[pigeonList[i]] + \
+            foxScores[foxList[i]] + \
+            pheasantScores[pheasantList[i]]
     
     result["Score"].append(score)
 
@@ -399,3 +636,4 @@ for i in range(len(antibioticResList)):
 
 print(tabulate(result, headers="keys", tablefmt="github"))
 print(f"Confidence: {confidence / len(antibioticResList) * 100}%")
+print(f"Threshold: {threshold}")
