@@ -42,7 +42,7 @@ def determineRange(scores):
     minScore = min(scores)
     maxScore = max(scores)
 
-    intervalSize = (maxScore - minScore) / 30
+    intervalSize = (maxScore - minScore) / 50
     # cipR 10
 
 
