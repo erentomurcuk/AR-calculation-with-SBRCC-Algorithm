@@ -43,7 +43,9 @@ def determineRange(scores):
     minScore = min(scores)
     maxScore = max(scores)
 
-    intervalSize = (maxScore - minScore) / 2
+    intervalSize = (maxScore - minScore) / 30
+    # cipR 10
+
 
     ranges = [(minScore + i * intervalSize, minScore + (i + 1) * intervalSize) for i in range(5)]
 
@@ -776,9 +778,12 @@ for i in range(len(antibioticResList)):
      
     result["Score"].append(score)
 
+    if score > float(antibioticInteger) * 6666:
+        result["Findings"].append(True if score >= threshold else False)
+    else:
+        result["Findings"].append(True if commonRanges[0] <= score < commonRanges[1] else False)
+
     # Compare score to threshold
-    #result["Findings"].append(True if score >= threshold else False)
-    result["Findings"].append(True if commonRanges[0] <= score < commonRanges[1] else False)
 
     # Compare findings to actual result
     if result["Findings"][i] == antibioticResList[i]:
