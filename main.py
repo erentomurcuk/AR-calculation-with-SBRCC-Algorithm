@@ -13,7 +13,6 @@
 import csv
 from collections import Counter
 import matplotlib.pyplot as plt
-import numpy as np
 from tabulate import tabulate
 
 def showGraph(xValues, yValues, xLabel, yLabel, title):
