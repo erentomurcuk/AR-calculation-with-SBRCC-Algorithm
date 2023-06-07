@@ -23,7 +23,6 @@ def showGraph(xValues, yValues, xLabel, yLabel, title):
     plt.ylabel(yLabel)
     plt.title(title)
 
-    plt.xlim(0)
     plt.show()
 
 def showAxis(numbers):
@@ -39,6 +38,34 @@ def showAxis(numbers):
     plt.ylim(0)  # Set x-axis limits
 
     plt.show()
+
+def determineRange(scores):
+    minScore = min(scores)
+    maxScore = max(scores)
+
+    intervalSize = (maxScore - minScore) / 2
+
+    ranges = [(minScore + i * intervalSize, minScore + (i + 1) * intervalSize) for i in range(5)]
+
+    intervalCounts = [0] * 5
+
+    for score in scores:
+        for i, (lower, upper) in enumerate(ranges):
+            if lower <= score < upper:
+                intervalCounts[i] += 1
+                break
+
+    maxCount = max(intervalCounts)
+
+    mostCommonRange = [ranges[i] for i, count in enumerate(intervalCounts) if count == maxCount]
+
+    commonScores = []
+
+    for i in mostCommonRange:
+        commonScores.append(i[0])
+        commonScores.append(i[1])
+
+    return commonScores
 
 def getScores(charList, resistantList, charNames):
     scores = {}
@@ -79,7 +106,7 @@ def switch(aInt):
 
 #) list name # name in .csv file
 # STEP 1: Create the lists for the specific columns
-antibioticResList = [] # amoxR
+antibioticResList = []
 animalSampledList = [] # animals_sampled
 herdSizeList = [] # herd_size
 organicList = [] # organic
@@ -139,6 +166,21 @@ rookList = [] # rook
 pigeonList = [] # pigeon
 foxList = [] # fox
 pheasantList = [] # pheasant
+ratList = [] # rat
+shootList = [] # shoot
+huntList = [] # hunt
+outSourceList = [] # outsource
+feedLorryList = [] # feedlorry
+aiExtersList = [] # aiexternal
+machineryList = [] # machinery
+housedOutdoorList = [] # s_housed_outdoor
+cefqList = [] # cefq_dct
+cephList = [] # ceph_dct
+framList = [] # fram_dct
+cloxList = [] # clox_dct
+calvingNowList = [] # s_calving_now
+waterList = [] # water
+preWeanedHeiferList = [] # preweaned_heifer
 
 def fetchColumns(fileName):
     with open(fileName, 'r') as f:
@@ -208,6 +250,21 @@ def fetchColumns(fileName):
             pigeonValue = row[headerRow.index("pigeon")]
             foxValue = row[headerRow.index("fox")]
             pheasantValue = row[headerRow.index("pheasant")]
+            ratValue = row[headerRow.index("rat")]
+            shootValue = row[headerRow.index("shoot")]
+            huntValue = row[headerRow.index("hunt")]
+            outSourceValue = row[headerRow.index("outsource")]
+            feedLorryValue = row[headerRow.index("feedlorry")]
+            aiExtersValue = row[headerRow.index("aiexternal")]
+            machineryValue = row[headerRow.index("machinery")]
+            housedOutdoorValue = row[headerRow.index("s_housed_outdoor")]
+            cefqValue = row[headerRow.index("cefq_dct")]
+            cephValue = row[headerRow.index("ceph_dct")]
+            framValue = row[headerRow.index("fram_dct")]
+            cloxValue = row[headerRow.index("clox_dct")]
+            calvingNowValue = row[headerRow.index("s_calving_now")]
+            waterValue = row[headerRow.index("water")]
+            preWeanedHeiferValue = row[headerRow.index("preweaned_heifer")]
 
             herdSizeList.append(int(herdSize))
             organicList.append(int(organicValue))
@@ -269,6 +326,21 @@ def fetchColumns(fileName):
             pigeonList.append(int(pigeonValue))
             foxList.append(int(foxValue))
             pheasantList.append(int(pheasantValue))
+            ratList.append(int(ratValue))
+            shootList.append(int(shootValue))
+            huntList.append(int(huntValue))
+            outSourceList.append(int(outSourceValue))
+            feedLorryList.append(int(feedLorryValue))
+            aiExtersList.append(int(aiExtersValue))
+            machineryList.append(int(machineryValue))
+            housedOutdoorList.append(housedOutdoorValue)
+            cefqList.append(int(cefqValue))
+            cephList.append(int(cephValue))
+            framList.append(int(framValue))
+            cloxList.append(int(cloxValue))
+            calvingNowList.append(int(calvingNowValue))
+            waterList.append(int(waterValue))
+            preWeanedHeiferList.append(int(preWeanedHeiferValue))
 
 
 antibioticInteger = input("Choose an antibiotic\n1) cipR\n2) tetR\n3) cephR\n4) strepR\n5) amoxR\nInput:")
@@ -338,6 +410,21 @@ microDatabase = {
     "Pigeon": pigeonList,
     "Fox": foxList,
     "Pheasant": pheasantList,
+    "Rat": ratList,
+    "Shoot": shootList,
+    "Hunt": huntList,
+    "Out Source": outSourceList,
+    "Feed Lorry": feedLorryList,
+    "AI External": aiExtersList,
+    "Machinery": machineryList,
+    "Housed Outdoor": housedOutdoorList,
+    "Cefquinome": cefqList,
+    "Cephalonium": cephList,
+    "Framycetin": framList,
+    "Cloxacillin": cloxList,
+    "Calving Now": calvingNowList,
+    "Water": waterList,
+    "Pre-Weaned Heifer": preWeanedHeiferList,
     "Scores": []
 }
 
@@ -348,6 +435,7 @@ weanNames = [1, 2, 3]
 animalNames = ["a", "d", "pw", "h"]
 clinicalMastitisNames = ["Amphenicol", "Macrolide", "Penicillimoxycillin", "Tetracycline", "Otherdontknow"] # Fifth
 firstMastitisNames = ["Cobactan", "MastiplanLC", "OrbeninLA", "UbroYellow", "Ubrolexin", "amoxyclav", "tdmultiject"]
+houseNames = ["outdoor", "housed"]
 
 
 organicScores = getScores(organicList, antibioticResList, binaryNames)
@@ -409,6 +497,21 @@ rookScores = getScores(rookList, antibioticResList, ordinalNames)
 pigeonScores = getScores(pigeonList, antibioticResList, ordinalNames)
 foxScores = getScores(foxList, antibioticResList, ordinalNames)
 pheasantScores = getScores(pheasantList, antibioticResList, ordinalNames)
+ratScores = getScores(ratList, antibioticResList, ordinalNames)
+shootScores = getScores(shootList, antibioticResList, ordinalNames)
+huntScores = getScores(huntList, antibioticResList, ordinalNames)
+outSourceScores = getScores(outSourceList, antibioticResList, binaryNames)
+feedLorryScores = getScores(feedLorryList, antibioticResList, binaryNames)
+aiExtersScores = getScores(aiExtersList, antibioticResList, binaryNames)
+machineryScores = getScores(machineryList, antibioticResList, binaryNames)
+housedOutdoorScores = getScores(housedOutdoorList, antibioticResList, houseNames)
+cefqScores = getScores(cefqList, antibioticResList, binaryNames)
+cephScores = getScores(cephList, antibioticResList, binaryNames)
+framScores = getScores(framList, antibioticResList, binaryNames)
+cloxScores = getScores(cloxList, antibioticResList, binaryNames)
+calvingNowScores = getScores(calvingNowList, antibioticResList, binaryNames)
+waterScores = getScores(waterList, antibioticResList, binaryNames)
+preWeanedHeiferScores = getScores(preWeanedHeiferList, antibioticResList, binaryNames)
 
 for i in range(len(antibioticResList)):
     microDatabase["Scores"].append(organicScores[microDatabase["Organic"][i]])
@@ -470,7 +573,22 @@ for i in range(len(antibioticResList)):
     microDatabase["Scores"][i] += pigeonScores[microDatabase["Pigeon"][i]]
     microDatabase["Scores"][i] += foxScores[microDatabase["Fox"][i]]
     microDatabase["Scores"][i] += pheasantScores[microDatabase["Pheasant"][i]]
-    
+    microDatabase["Scores"][i] += ratScores[microDatabase["Rat"][i]]
+    microDatabase["Scores"][i] += shootScores[microDatabase["Shoot"][i]]
+    microDatabase["Scores"][i] += huntScores[microDatabase["Hunt"][i]]
+    microDatabase["Scores"][i] += outSourceScores[microDatabase["Out Source"][i]]
+    microDatabase["Scores"][i] += feedLorryScores[microDatabase["Feed Lorry"][i]]
+    microDatabase["Scores"][i] += aiExtersScores[microDatabase["AI External"][i]]
+    microDatabase["Scores"][i] += machineryScores[microDatabase["Machinery"][i]]
+    microDatabase["Scores"][i] += housedOutdoorScores[microDatabase["Housed Outdoor"][i]]
+    microDatabase["Scores"][i] += cefqScores[microDatabase["Cefquinome"][i]]
+    microDatabase["Scores"][i] += cephScores[microDatabase["Cephalonium"][i]]
+    microDatabase["Scores"][i] += framScores[microDatabase["Framycetin"][i]]
+    microDatabase["Scores"][i] += cloxScores[microDatabase["Cloxacillin"][i]]
+    microDatabase["Scores"][i] += calvingNowScores[microDatabase["Calving Now"][i]]
+    microDatabase["Scores"][i] += waterScores[microDatabase["Water"][i]]
+    microDatabase["Scores"][i] += preWeanedHeiferScores[microDatabase["Pre-Weaned Heifer"][i]]
+
 sortedScores = sorted(microDatabase["Scores"])
 quarterSubset = sortedScores[:int(len(sortedScores) / 10)]
 
@@ -479,6 +597,8 @@ quarterSubset = sortedScores[:int(len(sortedScores) / 10)]
 # TODO: Pre-set threshold
 threshold = sum(quarterSubset) / len(quarterSubset)
 #threshold = 3000
+
+commonRanges = determineRange(sortedScores)
 
 # TODO: Do not forget to re-enable this part!
 #showGraph(microDatabase["Scores"], antibioticResList, "Score", "Amoxycillin Resistance", "Amoxycillin Resistance vs Score")
@@ -548,6 +668,21 @@ rookList = []
 pigeonList = []
 foxList = []
 pheasantList = []
+ratList = []
+shootList = []
+huntList = []
+outSourceList = []
+feedLorryList = []
+aiExtersList = []
+machineryList = []
+housedOutdoorList = []
+cefqList = []
+cephList = []
+framList = []
+cloxList = []
+calvingNowList = []
+waterList = []
+preWeanedHeiferList = []
 
 # Fetch for test set
 fetchColumns("testSet.csv")
@@ -622,12 +757,28 @@ for i in range(len(antibioticResList)):
             rookScores[rookList[i]] + \
             pigeonScores[pigeonList[i]] + \
             foxScores[foxList[i]] + \
-            pheasantScores[pheasantList[i]]
-    
+            pheasantScores[pheasantList[i]] + \
+            ratScores[ratList[i]] + \
+            shootScores[shootList[i]] + \
+            huntScores[huntList[i]] + \
+            outSourceScores[outSourceList[i]] + \
+            feedLorryScores[feedLorryList[i]] + \
+            aiExtersScores[aiExtersList[i]] + \
+            machineryScores[machineryList[i]] + \
+            housedOutdoorScores[housedOutdoorList[i]] + \
+            cefqScores[cefqList[i]] + \
+            cephScores[cephList[i]] + \
+            framScores[framList[i]] + \
+            cloxScores[cloxList[i]] + \
+            calvingNowScores[calvingNowList[i]] + \
+            waterScores[waterList[i]] + \
+            preWeanedHeiferScores[preWeanedHeiferList[i]]
+     
     result["Score"].append(score)
 
     # Compare score to threshold
-    result["Findings"].append(True if score >= threshold else False)
+    #result["Findings"].append(True if score >= threshold else False)
+    result["Findings"].append(True if commonRanges[0] <= score < commonRanges[1] else False)
 
     # Compare findings to actual result
     if result["Findings"][i] == antibioticResList[i]:
