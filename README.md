@@ -15,7 +15,6 @@ This project utilises the following libraries:
 - csv
 - collections
 - matplotlib
-- numpy
 - tabulate
 
 Run this command in your terminal in order to download all required dependencies:
