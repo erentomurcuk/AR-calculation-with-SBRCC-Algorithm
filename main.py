@@ -103,6 +103,20 @@ def switch(aInt):
     else:
         exit()
 
+def getAntibioticName(anti):
+    if anti == 1:
+        return "Ciprofloxacin"
+    elif anti == 2:
+        return "Tetracycline"
+    elif anti == 3:
+        return "Cephalexin"
+    elif anti == 4:
+        return "Streptomycin"
+    elif anti == 5:
+        return "Amoxycillin"
+    else:
+        return "Unknown"
+
 ##### MAIN #####
 
 #) list name # name in .csv file
@@ -602,7 +616,7 @@ threshold = sum(quarterSubset) / len(quarterSubset)
 commonRanges = determineRange(sortedScores)
 
 # TODO: Do not forget to re-enable this part!
-#showGraph(microDatabase["Scores"], antibioticResList, "Score", "Amoxycillin Resistance", "Amoxycillin Resistance vs Score")
+#showGraph(microDatabase["Scores"], antibioticResList, "Score", f"{getAntibioticName(int(antibioticInteger))} Resistance", f"{getAntibioticName(int(antibioticInteger))} Resistance vs Score")
 
 
 ####################### TEST SET #######################
