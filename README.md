@@ -1,5 +1,6 @@
 # CMP499X-Capstone
-Capstone Project Repository for Project 1010393, Determination of Resistance of Next Generation Antibiotics with the help of Machine Learning
+Capstone Project Repository for Project 1010393 & ETMS 2023 submission:
+A Reinforcement Learning-Inspired Estimation of Antibiotic Resistance in Poultry Environments,
 Bahçeşehir University
 
 Project Teachers: Asst. Prof. Çağlar Sivri & Asst. Prof. Ece Gelal Soyak
