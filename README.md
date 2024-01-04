@@ -3,6 +3,8 @@ Capstone Project Repository for Project 1010393 & ETMS 2023 submission:
 A Reinforcement Learning-Inspired Estimation of Antibiotic Resistance in Poultry Environments,
 Bahçeşehir University
 
+ETMS 2023 Proceedings Book: https://polen.itu.edu.tr/items/c2cd8045-090d-439a-b68e-718cf2672b68
+
 Project Teachers: Asst. Prof. Çağlar Sivri & Asst. Prof. Ece Gelal Soyak
 
 This project's source code is written by @Kaaleyah & @erentomurcuk.
